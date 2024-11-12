@@ -4,14 +4,14 @@ from matplotlib.animation import FuncAnimation,FFMpegWriter,writers
 from scipy.constants import G
 
 #Posicion inicial
-xi = [0,10]
-yi = [0,0]
+xi = [0,10,-10]
+yi = [0,0,0]
 
-vxi = [0,0,]
-vyi = [0,10]
+vxi = [0,0,0]
+vyi = [0.1,10,-10]
 
-m = [100000,10]
-q = [1,-1]
+m = [100000,10,10]
+q = [1,-1,-1]
 n = len(m)
 assert len(xi)==len(yi)==n==len(vxi)==len(vyi)
 h=0.01
@@ -99,8 +99,8 @@ def animate(i):
         ax.plot(xa[-traza:,i],ya[-traza:,i],c=get_color(i),linewidth=0.5)
     ax.scatter(xt,yt,s=np.sqrt(m),c=part_colors)
 
-ani = FuncAnimation(fig,animate,frames=5000,interval=0.1)
+ani = FuncAnimation(fig,animate,frames=1000,interval=0.1)
 #ffmpeg_writer = writers['ffmpeg']
-#writer = ffmpeg_writer(fps=64, codec='mpeg4')
-#ani.save("video1.mp4", writer=writer,dpi=400)
+#writer = ffmpeg_writer(fps=32, codec='mpeg4')
+#ani.save("video1.mp4", writer=writer,dpi=500)
 plt.show()
