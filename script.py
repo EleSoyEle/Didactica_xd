@@ -4,18 +4,20 @@ from matplotlib.animation import FuncAnimation,FFMpegWriter,writers
 from scipy.constants import G
 
 #Posicion inicial
-xi = [2000,1900,100,0,1000]
-yi = [0,0,0,0,0]
+xi = [0,10]
+yi = [0,0]
 
-vxi = [0,0,0,-1,0]
-vyi = [1,0,1,0,5]
+vxi = [0,0,]
+vyi = [0,10]
 
-m = [10,1000,100,1000,1e6]
+m = [100000,10]
+q = [1,-1]
 n = len(m)
 assert len(xi)==len(yi)==n==len(vxi)==len(vyi)
 h=0.01
 traza = 2000
 
+k=9e3
 
 def x_2(xt,yt):
     ax = []
@@ -28,8 +30,8 @@ def x_2(xt,yt):
                 dx = xt[i]-xt[p]
                 dy = yt[i]-yt[p]
                 d = pow(dx**2+dy**2,3/2)
-                xa += -m[p]*dx/d
-                ya += -m[p]*dy/d
+                xa += k*q[p]*q[i]*dx/(d*m[i])
+                ya += k*q[p]*q[i]*dy/(d*m[i])
         ax.append(xa)
         ay.append(ya)
 
