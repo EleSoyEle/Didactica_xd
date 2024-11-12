@@ -11,22 +11,25 @@ phi_i = float(input("Ingresa el angulo inicial de phi: "))
 dphi_i = 0
 
 ti = 0
-h=0.1
-k=0.1
-n=5
-m=1
-p = 1.5
+h=0.005
+k=0.01
+n=7
+m=10
+p = 0
+
+vmax = 0.5
+
 def dtheta2(theta,dtheta,phi,dphi,t):
     dif = (phi-theta)/2
-    return -g/l*np.sin(theta)+n*k*np.cos(dif)/(2*m*l**2*(2*l*np.sin(dif))**(n+1))-p*dtheta
+    return -g/l*np.sin(theta)+k*np.cos(dif)/(2*m*l**2*(2*l*np.sin(dif))**(n+1))-p*dtheta
 
 def dtheta1(theta,dtheta,phi,dphi,t):
-    return dtheta
+    return dtheta 
 
 
 def dphi2(theta,dtheta,phi,dphi,t):
     dif = (phi-theta)/2
-    return -g/l*np.sin(phi)-n*k*np.cos(dif)/(2*m*l**2*(2*l*np.sin(dif))**(n+1))-p*dphi
+    return -g/l*np.sin(phi)-k*np.cos(dif)/(2*m*l**2*(2*l*np.sin(dif))**(n+1))-p*dphi
 
 def dphi1(theta,dtheta,phi,dphi,t):
     return dphi
@@ -55,9 +58,15 @@ def calc_rk_coefs(theta,dtheta,phi,dphi,t):
 
     ntheta = theta + h*(k1thetax+2*k2thetax+2*k3thetax+k4thetax)/6
     ndtheta = dtheta + h*(k1thetav+2*k2thetav+2*k3thetav+k4thetav)/6
+    #Para evitar un desborde en la velocidad de theta
+    if not (-vmax<=ndtheta and ndtheta<=vmax):
+        ndtheta = vmax if ndtheta>0 else -vmax
 
     nphi = phi + h*(k1phix+2*k2phix+2*k3phix+k4phix)/6
     ndphi = dphi + h*(k1phiv+2*k2phiv+2*k3phiv+k4phiv)/6
+    #Para evitar un desborde en la velocidad de phi
+    if not (-vmax<=ndphi and ndphi<=vmax):
+        ndphi = vmax if ndphi>0 else -vmax
 
     return ntheta,ndtheta,nphi,ndphi
 
@@ -76,8 +85,7 @@ def animate(i):
     y1 = -l*np.cos(theta_i)
     x2 = l*np.sin(phi_i)
     y2 = -l*np.cos(phi_i)
-    
-    
+
     
     ax.clear()
     ax.set_xlim(-10,10)
@@ -87,7 +95,7 @@ def animate(i):
     ax.scatter((x1,x2),(y1,y2))
 
 
-ani = FuncAnimation(fig,animate,frames=1000,interval=0.01)
+ani = FuncAnimation(fig,animate,frames=1000,interval=0.001)
 #ffmpeg_writer = writers['ffmpeg']
 #writer = ffmpeg_writer(fps=32, codec='mpeg4')
 #ani.save("colision.mp4", writer=writer,dpi=500)
