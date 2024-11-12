@@ -66,6 +66,16 @@ fig = plt.figure()
 plt.style.use("dark_background")
 ax = fig.add_subplot()
 inter = 10
+
+colors = ["r","b"]
+def get_color(i):
+    if q[i]<0:
+        return colors[1]
+    else:
+        return colors[0]
+
+part_colors = [get_color(i) for i in range(n)]
+
 def animate(i):
     global x, y, vx, vy,lx,ly,lvx,lvy
     print(i)
@@ -86,8 +96,8 @@ def animate(i):
     #ax.set_xlim(-40+x[-1][2],40+x[-1][2])
     #ax.set_ylim(-40+y[-1][2],40+y[-1][2])
     for i in range(n):
-        ax.plot(xa[-traza:,i],ya[-traza:,i],c="w",linewidth=0.5)
-    ax.scatter(xt,yt,s=np.sqrt(m),c="w")
+        ax.plot(xa[-traza:,i],ya[-traza:,i],c=get_color(i),linewidth=0.5)
+    ax.scatter(xt,yt,s=np.sqrt(m),c=part_colors)
 
 ani = FuncAnimation(fig,animate,frames=5000,interval=0.1)
 #ffmpeg_writer = writers['ffmpeg']
